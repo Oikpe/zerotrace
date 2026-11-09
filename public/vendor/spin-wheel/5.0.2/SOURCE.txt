@@ -1,0 +1,13 @@
+Project: spin-wheel
+Version: 5.0.2
+Upstream: https://github.com/CrazyTim/spin-wheel
+Package metadata: https://registry.npmjs.org/spin-wheel/5.0.2
+Package archive: https://registry.npmjs.org/spin-wheel/-/spin-wheel-5.0.2.tgz
+Archive integrity (verified): sha512-H8C4ygjzKD8DbnaWelwvU/mB5qTVp5p9A9FGTQJqYKA1OJVs837L1f5M0g1jHhjw5U2WBY+V0Qksx8muXZ8qzA==
+Upstream bundle path: package/dist/spin-wheel-iife.js
+Bundle SHA-256: f02a1704248a9b069f2624b2770d0d67dcf81a073d43bfb270bd72e3b528706c
+IIFE export verified: spinWheel.Wheel (isolated Node VM; no browser rendering)
+Upstream license path: package/LICENSE.md
+License SHA-256: 7bdaf7726a7cfc61ea37169deb9e6a4e384a4c010eb48bff1a4ee29fb3b89598
+License: MIT; Copyright (c) 2020 CrazyTim
+Local modifications to bundle and license: none

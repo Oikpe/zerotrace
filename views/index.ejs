@@ -1,11 +1,104 @@
 <!DOCTYPE html>
-<html>
+<html lang='en'>
   <head>
-    <title><%= title %></title>
+    <meta charset='utf-8' />
+    <meta name='viewport' content='width=device-width, initial-scale=1' />
+    <title>ZeroTrace | European roulette wheel prototype</title>
     <link rel='stylesheet' href='/stylesheets/style.css' />
+    <script defer src='/vendor/spin-wheel/5.0.2/spin-wheel-iife.js'></script>
+    <script defer src='/javascripts/roulette-ui.js'></script>
   </head>
-  <body>
-    <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
+  <body class='prototype-page'>
+    <main class='prototype'>
+      <header class='prototype-header'>
+        <p class='brand'>ZeroTrace</p>
+        <h1>European roulette wheel prototype</h1>
+        <p>Choose Red or Black and a virtual stake. Development wheel previews remain separate while API integration is pending.</p>
+      </header>
+
+      <div class='prototype-layout'>
+        <section class='wheel-panel' aria-label='European roulette wheel preview'>
+          <div class='wheel-shell'>
+            <div id='roulette-wheel' class='wheel-canvas'></div>
+            <div class='wheel-hub' aria-hidden='true'><span class='wheel-spindle'></span></div>
+            <span class='wheel-pointer' aria-hidden='true'></span>
+          </div>
+          <p class='wheel-caption'>37 pockets: 18 red, 18 black and one green zero.</p>
+        </section>
+
+        <section class='betting-panel' aria-labelledby='betting-heading'>
+          <h2 id='betting-heading'>Betting table</h2>
+          <p id='table-help'>Numbers are display only. On narrow screens, scroll the table to see every number.</p>
+          <div class='number-table-scroll' role='region' aria-label='European number layout' aria-describedby='table-help' tabindex='0'>
+            <table class='number-layout'>
+              <caption>European number layout (display only)</caption>
+              <tbody>
+                <% [3, 2, 1].forEach(function(rowStart, rowIndex) { %>
+                  <tr>
+                    <% if (rowIndex === 0) { %>
+                      <td rowspan='3' data-table-number='0'>0</td>
+                    <% } %>
+                    <% for (var number = rowStart; number <= 36; number += 3) { %>
+                      <td data-table-number='<%= number %>'><%= number %></td>
+                    <% } %>
+                  </tr>
+                <% }); %>
+              </tbody>
+            </table>
+          </div>
+
+          <form id='betting-form' aria-describedby='betting-pending'>
+            <fieldset class='bet-options'>
+              <legend>Select a supported bet</legend>
+              <label class='bet-option bet-option-red' for='bet-red'>
+                <input id='bet-red' type='radio' name='selectedBet' value='red' checked />
+                <span>Red</span>
+              </label>
+              <label class='bet-option bet-option-black' for='bet-black'>
+                <input id='bet-black' type='radio' name='selectedBet' value='black' />
+                <span>Black</span>
+              </label>
+            </fieldset>
+            <label class='stake-label' for='stake-credits'>Stake (virtual credits)</label>
+            <input id='stake-credits' name='stakeCredits' type='number' min='1' max='1000' step='1' value='1' required inputmode='numeric' aria-describedby='stake-help stake-error' />
+            <p id='stake-help' class='control-note'>Use a whole number from 1 to 1000.</p>
+            <p id='stake-error' class='stake-error' aria-live='polite'></p>
+            <p class='bet-summary'><output id='bet-summary' for='bet-red bet-black stake-credits' aria-live='polite'>Selected bet: Red. Stake: 1 virtual credit.</output></p>
+            <button id='spin-button' class='spin-button' type='submit' disabled aria-describedby='betting-pending'>Spin (API integration pending)</button>
+            <p id='betting-pending' class='control-note'>Spin is disabled until API integration is complete. No experiment is being saved.</p>
+          </form>
+
+          <p class='probability-note'>For either color: win 18/37 (48.65%); lose 19/37 (51.35%), including zero. A win nets +stake; a loss nets &minus;stake. Expected net return is &minus;stake/37 (about &minus;2.70% of the stake) per spin. Spins are independent.</p>
+          <p class='control-note'>Educational simulator. Virtual credits only; no real money.</p>
+          <noscript><p>Enable JavaScript to show pocket colors and update the selected bet and stake.</p></noscript>
+        </section>
+      </div>
+
+      <section class='preview-panel' aria-labelledby='preview-heading'>
+        <h2 id='preview-heading'>Development previews</h2>
+        <p>Temporary controls for predetermined targets. Previews make no API requests and save no experiments.</p>
+        <div class='preview-buttons' role='group' aria-label='Temporary wheel preview controls'>
+          <button type='button' data-result-number='0' disabled>Preview 0</button>
+          <button type='button' data-result-number='13' disabled>Preview 13</button>
+          <button type='button' data-result-number='36' disabled>Preview 36</button>
+          <button type='button' id='repeat-target' disabled>Repeat last target</button>
+        </div>
+        <dl class='preview-readout'>
+          <div><dt>Requested number</dt><dd id='target-number'>Not selected</dd></div>
+          <div><dt>Target item index (0-based)</dt><dd id='target-index'>Not selected</dd></div>
+          <div><dt>Reported pocket at rest</dt><dd><output id='preview-result'>Not previewed</output></dd></div>
+        </dl>
+        <p id='preview-status' class='preview-status' role='status' aria-live='polite'>Loading the local wheel.</p>
+        <p id='motion-note' class='motion-note'>Previews animate for about 3.5 seconds.</p>
+        <p class='review-note'>Confirm the numbered pocket under the pointer yourself. The reported index alone does not establish visual alignment.</p>
+        <noscript><p class='preview-status' data-state='error'>Enable JavaScript to use this wheel prototype.</p></noscript>
+      </section>
+
+      <footer class='prototype-footer'>
+        Wheel animation: <a href='https://github.com/CrazyTim/spin-wheel'>spin-wheel 5.0.2</a>.
+        <a href='/vendor/spin-wheel/5.0.2/LICENSE.txt'>MIT license</a>.
+        <a href='/vendor/spin-wheel/5.0.2/SOURCE.txt'>Source and checksum</a>.
+      </footer>
+    </main>
   </body>
 </html>
