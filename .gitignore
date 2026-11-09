@@ -1,0 +1,16 @@
+# Dependencies
+node_modules/
+
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# IDE and local files
+.idea/
+*.iml
+
+# Logs and generated outputs
+*.log
+coverage/
+.DS_Store
