@@ -21,6 +21,52 @@ services:
     networks:
       - backend
 
+  app:
+    build:
+      context: .
+      target: runtime
+    image: zerotrace-app:m3
+    environment:
+      PGHOST: db
+      PGPORT: '5432'
+      PGDATABASE: ${PGDATABASE:?Set PGDATABASE in .env}
+      PGUSER: ${PGUSER:?Set PGUSER in .env}
+      PGPASSWORD: ${PGPASSWORD:?Set PGPASSWORD in .env}
+    ports:
+      - '127.0.0.1:3000:3000'
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test:
+        - CMD
+        - node
+        - -e
+        - >-
+          fetch('http://127.0.0.1:3000/health', { signal: AbortSignal.timeout(3000) })
+          .then(response => process.exit(response.status === 200 ? 0 : 1))
+          .catch(() => process.exit(1));
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    networks:
+      - backend
+
+  adminer:
+    image: adminer:6.3.0-standalone
+    profiles:
+      - tools
+    environment:
+      ADMINER_DEFAULT_SERVER: db
+    ports:
+      - '127.0.0.1:8080:8080'
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - backend
+
 volumes:
   db_data:
 
