@@ -86,7 +86,7 @@ function assertExperimentResponse(actual, record) {
 test('preserves the existing homepage', async function() {
   var response = await fetch(baseUrl + '/', { signal: AbortSignal.timeout(5000) });
   assert.equal(response.status, 200);
-  assert.match(await response.text(), /<h1>European roulette wheel prototype<\/h1>/);
+  assert.match(await response.text(), /<h1>Roulette Probability &amp; Risk Lab<\/h1>/);
 });
 
 test('health checks the required table and accepts an empty table', async function(t) {

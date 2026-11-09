@@ -1,53 +1,63 @@
-.prototype-page,
-.prototype-page * {
+.lab-page,
+.lab-page * {
   box-sizing: border-box;
 }
 
-.prototype-page {
+.lab-page {
   margin: 0;
-  background: #f3f0e8;
-  color: #21382f;
-  font: 16px/1.6 system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: #101516;
+  color: #f5f5f0;
+  font: 16px/1.55 system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  color-scheme: dark;
 }
 
-.prototype {
-  width: min(1120px, calc(100% - 48px));
+.lab {
+  width: min(1440px, calc(100% - 48px));
   margin: 0 auto;
-  padding: 40px 0 24px;
+  padding: 18px 0;
 }
 
-.prototype-header {
-  margin-bottom: 36px;
+.lab-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 24px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid #40564b;
 }
 
 .brand {
-  margin: 0 0 10px;
-  color: #17694b;
-  font-size: 1.05rem;
-  font-weight: 750;
-}
-
-.prototype h1,
-.prototype h2 {
-  line-height: 1.2;
-}
-
-.prototype h1 {
-  margin: 0 0 16px;
-  font-size: clamp(1.6rem, 4vw, 2.65rem);
-  font-weight: 650;
-}
-
-.prototype-header > p:last-child {
-  max-width: 68ch;
   margin: 0;
+  color: #f5f5f0;
+  font-size: 1.85rem;
+  font-weight: 750;
+  letter-spacing: 0.04em;
 }
 
-.prototype-layout {
+.lab h1,
+.lab h2 {
+  line-height: 1.25;
+}
+
+.lab h1 {
+  margin: 0;
+  font-size: clamp(1.1rem, 1.8vw, 1.4rem);
+  font-weight: 600;
+}
+
+.lab-header > p:last-child {
+  flex-basis: 100%;
+  margin: 0;
+  font-size: 0.9rem;
+  color: #aab4b0;
+}
+
+.play-layout {
   display: grid;
-  grid-template-columns: minmax(260px, 0.85fr) minmax(0, 1.15fr);
-  gap: clamp(24px, 4vw, 56px);
-  align-items: start;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  gap: 24px;
+  align-items: center;
+  margin-top: 20px;
 }
 
 .wheel-panel,
@@ -58,36 +68,23 @@
 .wheel-shell {
   position: relative;
   width: 100%;
-  max-width: 520px;
+  max-width: 660px;
   aspect-ratio: 1;
   margin: 0 auto;
-  border: clamp(6px, 1vw, 10px) solid #9b8052;
+  border: clamp(6px, 1vw, 9px) solid #c4a46a;
   border-radius: 50%;
-  background: #30271f;
-  box-shadow: 0 8px 24px #21382f24;
+  background: #101516;
+  box-shadow: 0 4px 18px #0006;
 }
 
-.wheel-canvas {
+.wheel-canvas,
+.ball-orbit {
   position: absolute;
   inset: 0;
 }
 
-.wheel-canvas canvas {
-  pointer-events: none;
-}
-
-.wheel-pointer {
-  position: absolute;
-  z-index: 2;
-  top: -8px;
-  left: 50%;
-  width: 0;
-  height: 0;
-  transform: translateX(-50%);
-  border-left: clamp(7px, 2vw, 11px) solid transparent;
-  border-right: clamp(7px, 2vw, 11px) solid transparent;
-  border-top: clamp(16px, 4vw, 22px) solid #fff4d5;
-  filter: drop-shadow(0 2px 2px #0008);
+.wheel-canvas canvas,
+.ball-orbit {
   pointer-events: none;
 }
 
@@ -96,96 +93,92 @@
   inset: 15%;
   display: grid;
   place-items: center;
-  border: 2px solid #a68c5b;
+  border: 2px solid #c4a46a;
   border-radius: 50%;
-  background: radial-gradient(circle, #214d3c 0%, #153c2d 68%, #102b21 100%);
-  box-shadow: 0 0 0 5px #142b22, inset 0 0 0 10px #ffffff08;
+  background: #1b2927;
+  box-shadow: 0 0 0 4px #101516, inset 0 0 0 8px #20543c;
   pointer-events: none;
 }
 
 .wheel-spindle {
-  width: 24%;
+  width: 22%;
   aspect-ratio: 1;
-  border: 6px solid #bca270;
+  border: 5px solid #c4a46a;
   border-radius: 50%;
-  background: #65573c;
-  box-shadow: 0 0 0 10px #bca27024;
+  background: #171a1c;
+  box-shadow: 0 0 0 8px #c4a46a26;
 }
 
-.wheel-caption {
-  margin: 20px 0 0;
+.ball-orbit {
+  z-index: 3;
+  will-change: transform;
+  transform: rotate(-45deg);
+  border-radius: 50%;
+}
+
+.roulette-ball {
+  position: absolute;
+  top: 2.5%;
+  left: 50%;
+  width: clamp(12px, 1.65vw, 18px);
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  border: 1px solid #fffaed;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 25%, #fffef6, #f2e9d5 55%, #bca884);
+  box-shadow: 0 0 0 1px #101516, 0 2px 4px #000c;
+}
+
+.wheel-caption,
+.motion-note {
+  margin: 10px 0 0;
   text-align: center;
+  color: #aab4b0;
   font-size: 0.9rem;
+}
+
+.betting-panel {
+  padding: 20px;
+  border: 6px solid #171a1c;
+  border-radius: 32px;
+  background: #20543c;
+  box-shadow: inset 0 0 0 1px #c4a46a, 0 4px 18px #0004;
 }
 
 .betting-panel h2,
 .result-section h2,
+.education-section h2,
 .history-section h2 {
   margin: 0 0 12px;
-  font-size: 1.4rem;
-}
-
-.result-section {
-  margin-top: 24px;
-}
-
-.result-details:not([hidden]) {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 14px;
-}
-
-.result-details {
-  margin: 0;
-  font-variant-numeric: tabular-nums;
-}
-
-.result-details dt {
-  color: #4b6054;
-  font-size: 0.85rem;
-}
-
-.result-details dd {
-  margin: 2px 0 0;
-  overflow-wrap: anywhere;
+  font-size: 1.25rem;
   font-weight: 650;
 }
 
-.game-status {
-  min-height: 1.6em;
-  font-weight: 600;
-}
-
-.game-status[data-state='error'] {
-  color: #9c2433;
-}
-
-.motion-note,
-.prototype-footer {
-  color: #4b6054;
-  font-size: 0.85rem;
-}
-
-.prototype-footer {
-  margin-top: 42px;
-  padding-top: 18px;
-  border-top: 1px solid #c8cec3;
-  overflow-wrap: anywhere;
-}
-
-.prototype-footer a {
-  color: #17694b;
-  text-underline-offset: 3px;
-}
-
 .betting-panel > p {
-  margin: 0 0 16px;
+  margin: 0 0 12px;
+}
+
+#table-help,
+.control-note,
+.number-layout caption,
+.history-table caption,
+.lab-footer {
+  color: #aab4b0;
+  font-size: 0.9rem;
+}
+
+.betting-panel #table-help,
+.betting-panel .control-note,
+.number-layout caption {
+  color: #b4bfba;
 }
 
 .number-table-scroll,
+.reference-scroll,
 .history-scroll {
   max-width: 100%;
   overflow-x: auto;
+  scrollbar-color: #aab4b0 #101516;
 }
 
 .number-layout {
@@ -196,43 +189,48 @@
   font-variant-numeric: tabular-nums;
 }
 
-.number-layout caption {
+.number-layout caption,
+.history-table caption {
   margin-bottom: 8px;
   text-align: left;
-  font-size: 0.85rem;
 }
 
 .number-layout td {
-  height: 44px;
+  height: 48px;
   padding: 2px;
-  border: 1px solid #e5d6b3;
-  background: #4b6054;
-  color: #fffdf5;
+  border: 1px solid #c4a46a99;
+  background: #20543c;
+  color: #f5f5f0;
   text-align: center;
-  font-size: 0.95rem;
+  font-size: 1rem;
   font-weight: 650;
 }
 
+.number-layout [data-table-number='0'] {
+  font-size: 1.35rem;
+}
+
 .number-layout [data-color='green'] {
-  background: #17694b;
+  background: #287347;
 }
 
 .number-layout [data-color='red'],
 .bet-option-red {
-  background: #b52d37;
+  background: #c33532;
 }
 
 .number-layout [data-color='black'],
 .bet-option-black {
-  background: #202525;
+  background: #171a1c;
 }
 
 .bet-options {
   display: flex;
   gap: 12px;
-  margin: 20px 0;
+  margin: 18px 0;
   padding: 0;
   border: 0;
+  min-width: 0;
 }
 
 .bet-options legend,
@@ -240,95 +238,235 @@
   display: block;
   margin-bottom: 8px;
   padding: 0;
-  font-weight: 650;
+  font-weight: 600;
 }
 
 .bet-option {
+  flex: 1;
   display: flex;
   align-items: center;
-  gap: 8px;
-  min-height: 44px;
-  padding: 10px 18px;
+  justify-content: center;
+  gap: 10px;
+  min-height: 64px;
+  padding: 14px 16px;
+  border: 2px solid #aab4b0;
+  font-size: 1.1rem;
   border-radius: 4px;
-  color: #fffdf5;
+  color: #f5f5f0;
   cursor: pointer;
+}
+
+.bet-option:has(input:checked) {
+  border-color: #c4a46a;
+  box-shadow: 0 0 0 1px #c4a46a;
 }
 
 .bet-option input {
   margin: 0;
-  accent-color: #fff;
+  accent-color: #c4a46a;
 }
 
-#stake-credits {
-  width: 10ch;
-  min-height: 44px;
-  padding: 8px;
-  border: 1px solid #687369;
-  border-radius: 4px;
-  background: #fffdf8;
-  color: inherit;
-  font: inherit;
+.stake-controls {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: end;
+  gap: 16px;
 }
 
-.control-note,
-.probability-note {
-  font-size: 0.85rem;
-}
-
-.control-note {
-  color: #4b6054;
-}
-
-.stake-error {
-  min-height: 1.5em;
-  margin: 8px 0;
-  color: #9c2433;
+.stake-presets > p {
+  margin: 0 0 8px;
   font-size: 0.9rem;
 }
 
-.bet-summary {
-  font-weight: 650;
+.stake-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
 }
 
-.spin-button {
-  min-height: 44px;
-  padding: 10px 16px;
-  border: 1px solid #17694b;
-  border-radius: 4px;
-  background: #17694b;
-  color: #fffdf5;
+.stake-chip {
+  position: relative;
+  width: 52px;
+  height: 52px;
+  padding: 0;
+  border: 4px dashed #c4a46a;
+  border-radius: 50%;
+  background: #1b2927;
+  color: #f5f5f0;
   font: inherit;
+  font-weight: 700;
   cursor: pointer;
 }
 
-.spin-button:disabled,
-.history-refresh:disabled {
-  border-color: #c6cbc1;
-  background: #e8e9e1;
-  color: #4b6054;
+.stake-chip::after {
+  content: '';
+  position: absolute;
+  inset: 3px;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.stake-chip:hover:not(:disabled) {
+  background: #20543c;
+}
+
+.stake-chip[aria-pressed='true'] {
+  border-color: #f5f5f0;
+  background: #c4a46a;
+  color: #101516;
+  box-shadow: 0 0 0 2px #101516;
+}
+
+.stake-chip:disabled {
+  opacity: 0.65;
   cursor: not-allowed;
 }
 
-.probability-note {
-  padding-top: 16px;
-  border-top: 1px solid #c8cec3;
+.stake-row {
+  display: flex;
+  align-items: end;
+  gap: 14px;
 }
 
-.number-table-scroll:focus-visible,
-.history-scroll:focus-visible,
-.spin-button:focus-visible,
-.history-refresh:focus-visible,
-.prototype-footer a:focus-visible,
-#stake-credits:focus-visible,
-.bet-option:focus-within {
-  outline: 3px solid #315fbd;
-  outline-offset: 4px;
+.stake-field,
+.spin-button {
+  flex: 1;
+  min-width: 0;
 }
 
+#stake-credits {
+  width: 100%;
+  min-height: 48px;
+  padding: 8px 12px;
+  border: 1px solid #aab4b0;
+  border-radius: 4px;
+  background: #101516;
+  color: #f5f5f0;
+  font: inherit;
+}
+
+#stake-credits[aria-invalid='true'] {
+  border-color: #ffaaa4;
+}
+
+.control-note {
+  margin: 8px 0;
+}
+
+.stake-error {
+  margin: 4px 0;
+  color: #ffaaa4;
+  font-size: 0.9rem;
+}
+
+.stake-error:empty {
+  margin: 0;
+}
+
+.bet-summary {
+  margin: 8px 0;
+  font-weight: 600;
+}
+
+.spin-button,
+.history-refresh,
+.history-toggle {
+  min-height: 48px;
+  padding: 10px 18px;
+  border: 1px solid #c4a46a;
+  border-radius: 4px;
+  background: #c4a46a;
+  color: #101516;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.spin-button:hover:not(:disabled),
+.history-refresh:hover:not(:disabled),
+.history-toggle:hover:not(:disabled) {
+  background: #f5f5f0;
+  color: #101516;
+}
+
+.spin-button:disabled,
+.history-refresh:disabled,
+.history-toggle:disabled {
+  border-color: #aab4b0;
+  background: #1b2927;
+  color: #aab4b0;
+  cursor: not-allowed;
+}
+
+.game-status {
+  min-height: 1.5em;
+  margin: 10px 0;
+  font-weight: 600;
+}
+
+.game-status[data-state='error'] {
+  color: #ffaaa4;
+}
+
+.result-section,
+.education-section,
 .history-section {
-  margin-top: 36px;
-  padding-top: 24px;
-  border-top: 1px solid #c8cec3;
+  margin-top: 22px;
+  padding-top: 18px;
+  border-top: 1px solid #40564b;
+}
+
+.result-details:not([hidden]) {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px 20px;
+}
+
+.result-details {
+  margin: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.result-details dt {
+  color: #aab4b0;
+  font-size: 0.875rem;
+  overflow-wrap: anywhere;
+}
+
+.result-details dd {
+  margin: 4px 0 0;
+  overflow-wrap: anywhere;
+  font-weight: 600;
+}
+
+#result-number {
+  color: #f5f5f0;
+  font-size: clamp(1.75rem, 2.5vw, 2.25rem);
+  line-height: 1.2;
+  text-transform: capitalize;
+}
+
+#result-net {
+  font-size: clamp(1.1rem, 1.8vw, 1.5rem);
+  font-weight: 700;
+}
+
+#result-outcome {
+  font-size: 1.25rem;
+}
+
+[data-outcome='positive'] {
+  color: #8fe0a5;
+}
+
+[data-outcome='negative'] {
+  color: #ffaaa4;
+}
+
+#result-id,
+#result-time {
+  font-size: 0.9rem;
 }
 
 .history-heading {
@@ -339,45 +477,187 @@
   gap: 12px;
 }
 
-.history-refresh {
-  min-height: 44px;
-  padding: 8px 12px;
-  border: 1px solid #17694b;
-  border-radius: 4px;
-  background: #fffdf8;
-  color: #184b36;
-  font: inherit;
-  cursor: pointer;
+.history-refresh,
+.history-toggle {
+  min-height: 40px;
+  padding: 6px 12px;
+  background: transparent;
+  color: #c4a46a;
+  font-weight: 600;
+}
+
+.history-toggle {
+  margin-top: 12px;
 }
 
 .history-table {
   width: 100%;
-  min-width: 900px;
+  min-width: 640px;
   border-collapse: collapse;
   font-variant-numeric: tabular-nums;
-}
-
-.history-table caption {
-  text-align: left;
-  font-size: 0.85rem;
 }
 
 .history-table th,
 .history-table td {
   padding: 10px 8px;
-  border-bottom: 1px solid #c8cec3;
+  border-bottom: 1px solid #40564b;
   text-align: left;
 }
 
-@media (max-width: 900px) {
-  .prototype {
-    width: calc(100% - 32px);
-    padding-top: 24px;
+.history-table th {
+  background: #1b2927;
+  color: #f5f5f0;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.history-table td {
+  font-size: 0.95rem;
+}
+
+.history-table td[data-outcome] {
+  font-weight: 650;
+  white-space: nowrap;
+}
+
+.history-table tbody tr:nth-child(even) {
+  background: #1b292766;
+}
+
+.lab-footer {
+  margin-top: 22px;
+  padding-top: 14px;
+  border-top: 1px solid #40564b;
+  overflow-wrap: anywhere;
+}
+
+.lab-footer a {
+  color: #c4a46a;
+  text-underline-offset: 3px;
+}
+
+.number-table-scroll:focus-visible,
+.reference-scroll:focus-visible,
+.record-details summary:focus-visible,
+.history-scroll:focus-visible,
+.spin-button:focus-visible,
+.history-refresh:focus-visible,
+.history-toggle:focus-visible,
+.stake-chip:focus-visible,
+.learn-odds > summary:focus-visible,
+.lab-footer a:focus-visible,
+#stake-credits:focus-visible,
+.bet-option:focus-within {
+  outline: 3px solid #c4a46a;
+  outline-offset: 4px;
+}
+
+.record-details {
+  margin-top: 8px;
+  font-size: 0.9rem;
+}
+
+.record-details summary {
+  color: #c4a46a;
+  cursor: pointer;
+}
+
+.record-details dl {
+  margin: 8px 0 0;
+}
+
+.record-details dl > div + div {
+  margin-top: 8px;
+}
+
+.record-details dt {
+  color: #aab4b0;
+  font-size: 0.875rem;
+}
+
+.record-details dd {
+  margin: 2px 0 0;
+  overflow-wrap: anywhere;
+  font-family: ui-monospace, Consolas, monospace;
+  font-size: 0.875rem;
+}
+
+.history-table .record-details {
+  margin: 0;
+}
+
+.education-brief {
+  max-width: 85ch;
+  margin: 0;
+}
+
+.education-brief + .education-brief {
+  margin-top: 10px;
+}
+
+.learn-odds {
+  margin-top: 12px;
+}
+
+.learn-odds > summary {
+  color: #c4a46a;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.learn-odds .education-layout {
+  margin-top: 16px;
+}
+
+.education-layout {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+  font-size: 1rem;
+}
+
+.education-layout > div {
+  min-width: 0;
+}
+
+.education-layout p {
+  margin: 0 0 12px;
+}
+
+.reference-table {
+  width: 100%;
+  min-width: 440px;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.reference-table caption {
+  margin-bottom: 8px;
+  text-align: left;
+  color: #f5f5f0;
+  font-weight: 600;
+}
+
+.reference-table th,
+.reference-table td {
+  padding: 8px;
+  border-bottom: 1px solid #40564b;
+  text-align: left;
+}
+
+.reference-table th {
+  font-weight: 600;
+}
+
+@media (max-width: 1120px) {
+  .play-layout,
+  .education-layout {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 20px;
   }
 
-  .prototype-layout {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 32px;
+  .wheel-shell {
+    max-width: 560px;
   }
 
   .betting-panel {
@@ -385,4 +665,60 @@
     max-width: 720px;
     margin: 0 auto;
   }
+
+  .result-details:not([hidden]) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 600px) {
+  .stake-controls {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .lab {
+    width: calc(100% - 28px);
+    padding-top: 16px;
+  }
+
+  .betting-panel {
+    padding: 14px;
+  }
+
+  .history-heading {
+    align-items: start;
+  }
+}
+
+.welcome-dialog {
+  width: min(520px, calc(100% - 32px));
+  max-height: calc(100vh - 32px);
+  padding: 24px;
+  overflow-y: auto;
+  border: 1px solid #c4a46a;
+  border-radius: 12px;
+  background: #1b2927;
+  color: #f5f5f0;
+  font: inherit;
+}
+
+.welcome-dialog::backdrop {
+  background: #101516d9;
+}
+
+.welcome-dialog h2 {
+  margin: 0 0 16px;
+  font-size: 1.5rem;
+  line-height: 1.25;
+}
+
+.welcome-dialog p {
+  margin: 0 0 12px;
+}
+
+.entry-button {
+  width: 100%;
+  margin-top: 8px;
 }

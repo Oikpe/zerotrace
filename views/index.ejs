@@ -3,50 +3,45 @@
   <head>
     <meta charset='utf-8' />
     <meta name='viewport' content='width=device-width, initial-scale=1' />
-    <title>ZeroTrace | European roulette wheel prototype</title>
+    <title>ZeroTrace — Roulette Probability &amp; Risk Lab</title>
     <link rel='stylesheet' href='/stylesheets/style.css' />
     <script defer src='/vendor/spin-wheel/5.0.2/spin-wheel-iife.js'></script>
     <script defer src='/javascripts/roulette-ui.js'></script>
   </head>
-  <body class='prototype-page'>
-    <main class='prototype'>
-      <header class='prototype-header'>
+  <body class='lab-page'>
+    <dialog id='welcome-dialog' class='welcome-dialog' aria-labelledby='welcome-heading' aria-describedby='welcome-purpose welcome-credits welcome-risk'>
+      <h2 id='welcome-heading'>Welcome to ZeroTrace</h2>
+      <p id='welcome-purpose'>ZeroTrace is an educational European roulette simulator designed to demonstrate probability, expected returns and the risks of repeated betting.</p>
+      <p id='welcome-credits'>All bets use virtual credits. No real money, deposits or withdrawals are involved.</p>
+      <p id='welcome-risk'>Roulette outcomes are independent. Past results do not predict future spins, and no strategy guarantees a profit.</p>
+      <button id='enter-simulator' class='spin-button entry-button' type='button'>Enter Simulator</button>
+    </dialog>
+    <main id='simulator' class='lab' inert>
+      <header class='lab-header'>
         <p class='brand'>ZeroTrace</p>
-        <h1>European roulette wheel prototype</h1>
-        <p>Choose Red or Black and a virtual stake. Each spin uses a server-generated result and saves one experiment.</p>
+        <h1>Roulette Probability &amp; Risk Lab</h1>
+        <p>European single-zero roulette &middot; Virtual credits only &middot; No real money</p>
       </header>
 
-      <div class='prototype-layout'>
+      <div class='play-layout'>
         <section class='wheel-panel' aria-label='European roulette wheel'>
           <div class='wheel-shell'>
             <div id='roulette-wheel' class='wheel-canvas'></div>
             <div class='wheel-hub' aria-hidden='true'><span class='wheel-spindle'></span></div>
-            <span class='wheel-pointer' aria-hidden='true'></span>
+            <div id='ball-orbit' class='ball-orbit' aria-hidden='true'>
+              <span id='roulette-ball' class='roulette-ball'></span>
+            </div>
           </div>
           <p class='wheel-caption'>37 pockets: 18 red, 18 black and one green zero.</p>
-          <p id='motion-note' class='motion-note'>Spins animate for about 3.5 seconds.</p>
-          <section class='result-section' aria-labelledby='result-heading'>
-            <h2 id='result-heading'>Latest spin result</h2>
-            <p id='result-empty'>No completed spin in this session.</p>
-            <dl id='result-details' class='result-details' hidden>
-              <div><dt>Result number / color</dt><dd id='result-number'></dd></div>
-              <div><dt>Win / loss</dt><dd id='result-outcome'></dd></div>
-              <div><dt>Bet / stake</dt><dd id='result-bet'></dd></div>
-              <div><dt>Net payout</dt><dd id='result-net'></dd></div>
-              <div><dt>Expected net return per spin</dt><dd id='result-expected'></dd></div>
-              <div><dt>Win / loss probabilities</dt><dd id='result-probabilities'></dd></div>
-              <div><dt>Saved experiment ID</dt><dd id='result-id'></dd></div>
-              <div><dt>Saved at (UTC)</dt><dd id='result-time'></dd></div>
-            </dl>
-          </section>
+          <p id='motion-note' class='motion-note'>Ball rests on the outer rail before a spin.</p>
         </section>
 
         <section class='betting-panel' aria-labelledby='betting-heading'>
-          <h2 id='betting-heading'>Betting table</h2>
-          <p id='table-help'>Numbers are display only. On narrow screens, scroll the table to see every number.</p>
+          <h2 id='betting-heading'>Place your bet</h2>
+          <p id='table-help'>Numbers are for reference. Only Red and Black can be selected.</p>
           <div class='number-table-scroll' role='region' aria-label='European number layout' aria-describedby='table-help' tabindex='0'>
             <table class='number-layout'>
-              <caption>European number layout (display only)</caption>
+              <caption>0–36 · Scroll the table on narrow screens</caption>
               <tbody>
                 <% [3, 2, 1].forEach(function(rowStart, rowIndex) { %>
                   <tr>
@@ -62,9 +57,9 @@
             </table>
           </div>
 
-          <form id='betting-form' aria-describedby='spin-help'>
+          <form id='betting-form' aria-describedby='table-help stake-help'>
             <fieldset class='bet-options'>
-              <legend>Select a supported bet</legend>
+              <legend>Bet on a color</legend>
               <label class='bet-option bet-option-red' for='bet-red'>
                 <input id='bet-red' type='radio' name='selectedBet' value='red' checked required />
                 <span>Red</span>
@@ -74,21 +69,85 @@
                 <span>Black</span>
               </label>
             </fieldset>
-            <label class='stake-label' for='stake-credits'>Stake (virtual credits)</label>
-            <input id='stake-credits' name='stakeCredits' type='number' min='1' max='1000' step='1' value='1' required inputmode='numeric' aria-describedby='stake-help stake-error' />
-            <p id='stake-help' class='control-note'>Use a whole number from 1 to 1000.</p>
+            <div class='stake-controls'>
+              <div class='stake-presets'>
+                <p id='stake-presets-label'>Quick stakes (credits)</p>
+                <div class='stake-chips' role='group' aria-labelledby='stake-presets-label'>
+                  <button class='stake-chip' type='button' data-stake-credits='10' aria-label='Stake 10 virtual credits' aria-pressed='false' disabled>10</button>
+                  <button class='stake-chip' type='button' data-stake-credits='50' aria-label='Stake 50 virtual credits' aria-pressed='false' disabled>50</button>
+                  <button class='stake-chip' type='button' data-stake-credits='100' aria-label='Stake 100 virtual credits' aria-pressed='false' disabled>100</button>
+                  <button class='stake-chip' type='button' data-stake-credits='500' aria-label='Stake 500 virtual credits' aria-pressed='false' disabled>500</button>
+                </div>
+              </div>
+              <div class='stake-row'>
+                <div class='stake-field'>
+                  <label class='stake-label' for='stake-credits'>Custom stake</label>
+                  <input id='stake-credits' name='stakeCredits' type='number' min='1' max='1000' step='1' value='1' required inputmode='numeric' aria-describedby='stake-help stake-error' />
+                </div>
+                <button id='spin-button' class='spin-button' type='submit' disabled>Spin</button>
+              </div>
+            </div>
+            <p id='stake-help' class='control-note'>1–1000 virtual credits, whole numbers only.</p>
             <p id='stake-error' class='stake-error' aria-live='polite'></p>
             <p class='bet-summary'><output id='bet-summary' for='bet-red bet-black stake-credits' aria-live='polite'>Selected bet: Red. Stake: 1 virtual credit.</output></p>
-            <button id='spin-button' class='spin-button' type='submit' disabled>Spin</button>
-            <p id='spin-help' class='control-note'>Each spin saves one experiment. The server chooses the result.</p>
-            <p id='spin-status' class='game-status' role='status' aria-live='polite'>Loading gameplay controls.</p>
+            <p id='spin-status' class='game-status' role='status' aria-live='polite'>Loading controls.</p>
           </form>
 
-          <p class='probability-note'>For either color: win 18/37 (48.65%); lose 19/37 (51.35%), including zero. A win nets +stake; a loss nets &minus;stake. Expected net return is &minus;stake/37 (about &minus;2.70% of the stake) per spin. Spins are independent.</p>
-          <p class='control-note'>Educational simulator. Virtual credits only; no real money.</p>
           <noscript><p>Enable JavaScript to play and load saved history.</p></noscript>
         </section>
       </div>
+
+      <section class='result-section' aria-labelledby='result-heading'>
+        <h2 id='result-heading'>Latest spin result</h2>
+        <p id='result-empty'>No completed spin in this session.</p>
+        <dl id='result-details' class='result-details' hidden>
+          <div><dt>Result number / color</dt><dd id='result-number'></dd></div>
+          <div><dt>Net payout</dt><dd id='result-net'></dd></div>
+          <div><dt>Win / loss</dt><dd id='result-outcome'></dd></div>
+          <div><dt>Bet / stake</dt><dd id='result-bet'></dd></div>
+          <div><dt>Expected net return per spin</dt><dd id='result-expected'></dd></div>
+          <div><dt>Win / loss probabilities</dt><dd id='result-probabilities'></dd></div>
+        </dl>
+        <details id='result-record' class='record-details' hidden>
+          <summary>Saved record details</summary>
+          <dl>
+            <div><dt>Experiment ID</dt><dd id='result-id'></dd></div>
+            <div><dt>Saved at (UTC)</dt><dd id='result-time'></dd></div>
+          </dl>
+        </details>
+      </section>
+
+      <section class='education-section' aria-labelledby='education-heading'>
+        <h2 id='education-heading'>How Red &amp; Black Works</h2>
+        <p class='education-brief'>Choose Red or Black before spinning. The wheel has 37 numbers: 18 red, 18 black, and one green zero. You win when the ball lands on your chosen color. Zero makes both color bets lose.</p>
+        <p class='education-brief'>Each color has an 18-in-37 chance of winning (48.65%). Over many spins, the average expected loss is about 2.70 credits for every 100 credits staked. This does not predict your next spin.</p>
+        <details class='learn-odds'>
+          <summary>Learn the Odds</summary>
+          <div class='education-layout'>
+            <div>
+              <p>A European wheel has 37 equally likely pockets: 18 red, 18 black and one green zero. Red or Black wins with probability <strong>18/37 (48.65%)</strong> and loses with probability <strong>19/37 (51.35%)</strong>. Zero is a loss for either color.</p>
+              <p><strong>Net payout</strong> is your profit or loss, excluding any returned stake. A 10-credit Red/Black bet wins 10 credits net (20 returned in total), or loses the full 10-credit stake.</p>
+              <p><strong>Expected net return per spin:</strong> (18/37 &times; stake) &minus; (19/37 &times; stake) = <strong>&minus;stake/37</strong>.</p>
+              <p>The <strong>2.70% house edge</strong> means an average loss of about 2.70 credits per 100 credits staked over many spins. It does not predict a single spin. Past results do not change the next spin's odds.</p>
+            </div>
+            <div>
+              <div class='reference-scroll' role='region' aria-label='Informational betting comparison' tabindex='0'>
+                <table class='reference-table'>
+                  <caption>Bet comparison &mdash; information only</caption>
+                  <thead><tr><th scope='col'>Bet (coverage)</th><th scope='col'>Win probability</th><th scope='col'>Net win</th><th scope='col'>House edge</th></tr></thead>
+                  <tbody>
+                    <tr><th scope='row'>Red/Black (18 numbers)</th><td>18/37 (48.65%)</td><td>+stake (1:1)</td><td>2.70%</td></tr>
+                    <tr><th scope='row'>Dozen (12 numbers)</th><td>12/37 (32.43%)</td><td>+2 &times; stake (2:1)</td><td>2.70%</td></tr>
+                    <tr><th scope='row'>Straight-up (1 number)</th><td>1/37 (2.70%)</td><td>+35 &times; stake (35:1)</td><td>2.70%</td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <p class='control-note'>A dozen covers 1&ndash;12, 13&ndash;24 or 25&ndash;36; straight-up covers one chosen number from 0&ndash;36. Dozen and Straight-up are reference material only and cannot be selected here.</p>
+              <p class='control-note'>These are standard single-zero payouts. A losing bet costs the full stake; each listed bet has expected net return &minus;stake/37. Larger winning payouts do not remove the house edge.</p>
+            </div>
+          </div>
+        </details>
+      </section>
 
       <section class='history-section' aria-labelledby='history-heading'>
         <div class='history-heading'>
@@ -100,14 +159,15 @@
           <table class='history-table'>
             <caption>Latest 20 experiments, newest first</caption>
             <thead>
-              <tr><th scope='col'>Experiment ID</th><th scope='col'>Saved at (UTC)</th><th scope='col'>Bet</th><th scope='col'>Stake</th><th scope='col'>Result</th><th scope='col'>Outcome</th><th scope='col'>Net credits</th></tr>
+              <tr><th scope='col'>Bet</th><th scope='col'>Stake</th><th scope='col'>Result</th><th scope='col'>Outcome</th><th scope='col'>Net credits</th><th scope='col'>Record</th></tr>
             </thead>
             <tbody id='history-body'></tbody>
           </table>
         </div>
+        <button id='history-toggle' class='history-toggle' type='button' aria-controls='history-body' aria-expanded='false' hidden disabled>Show more</button>
       </section>
 
-      <footer class='prototype-footer'>
+      <footer class='lab-footer'>
         Wheel animation: <a href='https://github.com/CrazyTim/spin-wheel'>spin-wheel 5.0.2</a>.
         <a href='/vendor/spin-wheel/5.0.2/LICENSE.txt'>MIT license</a>.
         <a href='/vendor/spin-wheel/5.0.2/SOURCE.txt'>Source and checksum</a>.
