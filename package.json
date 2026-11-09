@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "test": "node --test --test-reporter=spec test/roulette.test.js"
+    "test": "node --test --test-reporter=spec test/roulette.test.js",
+    "test:db": "node --env-file=.env --test --test-reporter=spec test/db.test.js"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
@@ -12,6 +13,7 @@
     "ejs": "~2.6.1",
     "express": "~4.16.1",
     "http-errors": "~1.6.3",
-    "morgan": "~1.9.1"
+    "morgan": "~1.9.1",
+    "pg": "8.23.1"
   }
 }
