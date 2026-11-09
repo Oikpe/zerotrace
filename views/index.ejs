@@ -13,17 +13,32 @@
       <header class='prototype-header'>
         <p class='brand'>ZeroTrace</p>
         <h1>European roulette wheel prototype</h1>
-        <p>Choose Red or Black and a virtual stake. Development wheel previews remain separate while API integration is pending.</p>
+        <p>Choose Red or Black and a virtual stake. Each spin uses a server-generated result and saves one experiment.</p>
       </header>
 
       <div class='prototype-layout'>
-        <section class='wheel-panel' aria-label='European roulette wheel preview'>
+        <section class='wheel-panel' aria-label='European roulette wheel'>
           <div class='wheel-shell'>
             <div id='roulette-wheel' class='wheel-canvas'></div>
             <div class='wheel-hub' aria-hidden='true'><span class='wheel-spindle'></span></div>
             <span class='wheel-pointer' aria-hidden='true'></span>
           </div>
           <p class='wheel-caption'>37 pockets: 18 red, 18 black and one green zero.</p>
+          <p id='motion-note' class='motion-note'>Spins animate for about 3.5 seconds.</p>
+          <section class='result-section' aria-labelledby='result-heading'>
+            <h2 id='result-heading'>Latest spin result</h2>
+            <p id='result-empty'>No completed spin in this session.</p>
+            <dl id='result-details' class='result-details' hidden>
+              <div><dt>Result number / color</dt><dd id='result-number'></dd></div>
+              <div><dt>Win / loss</dt><dd id='result-outcome'></dd></div>
+              <div><dt>Bet / stake</dt><dd id='result-bet'></dd></div>
+              <div><dt>Net payout</dt><dd id='result-net'></dd></div>
+              <div><dt>Expected net return per spin</dt><dd id='result-expected'></dd></div>
+              <div><dt>Win / loss probabilities</dt><dd id='result-probabilities'></dd></div>
+              <div><dt>Saved experiment ID</dt><dd id='result-id'></dd></div>
+              <div><dt>Saved at (UTC)</dt><dd id='result-time'></dd></div>
+            </dl>
+          </section>
         </section>
 
         <section class='betting-panel' aria-labelledby='betting-heading'>
@@ -47,11 +62,11 @@
             </table>
           </div>
 
-          <form id='betting-form' aria-describedby='betting-pending'>
+          <form id='betting-form' aria-describedby='spin-help'>
             <fieldset class='bet-options'>
               <legend>Select a supported bet</legend>
               <label class='bet-option bet-option-red' for='bet-red'>
-                <input id='bet-red' type='radio' name='selectedBet' value='red' checked />
+                <input id='bet-red' type='radio' name='selectedBet' value='red' checked required />
                 <span>Red</span>
               </label>
               <label class='bet-option bet-option-black' for='bet-black'>
@@ -64,34 +79,32 @@
             <p id='stake-help' class='control-note'>Use a whole number from 1 to 1000.</p>
             <p id='stake-error' class='stake-error' aria-live='polite'></p>
             <p class='bet-summary'><output id='bet-summary' for='bet-red bet-black stake-credits' aria-live='polite'>Selected bet: Red. Stake: 1 virtual credit.</output></p>
-            <button id='spin-button' class='spin-button' type='submit' disabled aria-describedby='betting-pending'>Spin (API integration pending)</button>
-            <p id='betting-pending' class='control-note'>Spin is disabled until API integration is complete. No experiment is being saved.</p>
+            <button id='spin-button' class='spin-button' type='submit' disabled>Spin</button>
+            <p id='spin-help' class='control-note'>Each spin saves one experiment. The server chooses the result.</p>
+            <p id='spin-status' class='game-status' role='status' aria-live='polite'>Loading gameplay controls.</p>
           </form>
 
           <p class='probability-note'>For either color: win 18/37 (48.65%); lose 19/37 (51.35%), including zero. A win nets +stake; a loss nets &minus;stake. Expected net return is &minus;stake/37 (about &minus;2.70% of the stake) per spin. Spins are independent.</p>
           <p class='control-note'>Educational simulator. Virtual credits only; no real money.</p>
-          <noscript><p>Enable JavaScript to show pocket colors and update the selected bet and stake.</p></noscript>
+          <noscript><p>Enable JavaScript to play and load saved history.</p></noscript>
         </section>
       </div>
 
-      <section class='preview-panel' aria-labelledby='preview-heading'>
-        <h2 id='preview-heading'>Development previews</h2>
-        <p>Temporary controls for predetermined targets. Previews make no API requests and save no experiments.</p>
-        <div class='preview-buttons' role='group' aria-label='Temporary wheel preview controls'>
-          <button type='button' data-result-number='0' disabled>Preview 0</button>
-          <button type='button' data-result-number='13' disabled>Preview 13</button>
-          <button type='button' data-result-number='36' disabled>Preview 36</button>
-          <button type='button' id='repeat-target' disabled>Repeat last target</button>
+      <section class='history-section' aria-labelledby='history-heading'>
+        <div class='history-heading'>
+          <h2 id='history-heading'>Recent saved experiments</h2>
+          <button id='history-refresh' class='history-refresh' type='button' disabled>Refresh history</button>
         </div>
-        <dl class='preview-readout'>
-          <div><dt>Requested number</dt><dd id='target-number'>Not selected</dd></div>
-          <div><dt>Target item index (0-based)</dt><dd id='target-index'>Not selected</dd></div>
-          <div><dt>Reported pocket at rest</dt><dd><output id='preview-result'>Not previewed</output></dd></div>
-        </dl>
-        <p id='preview-status' class='preview-status' role='status' aria-live='polite'>Loading the local wheel.</p>
-        <p id='motion-note' class='motion-note'>Previews animate for about 3.5 seconds.</p>
-        <p class='review-note'>Confirm the numbered pocket under the pointer yourself. The reported index alone does not establish visual alignment.</p>
-        <noscript><p class='preview-status' data-state='error'>Enable JavaScript to use this wheel prototype.</p></noscript>
+        <p id='history-status' class='game-status' role='status' aria-live='polite'>Loading saved history.</p>
+        <div id='history-scroll' class='history-scroll' role='region' aria-label='Saved experiment history' tabindex='0' hidden>
+          <table class='history-table'>
+            <caption>Latest 20 experiments, newest first</caption>
+            <thead>
+              <tr><th scope='col'>Experiment ID</th><th scope='col'>Saved at (UTC)</th><th scope='col'>Bet</th><th scope='col'>Stake</th><th scope='col'>Result</th><th scope='col'>Outcome</th><th scope='col'>Net credits</th></tr>
+            </thead>
+            <tbody id='history-body'></tbody>
+          </table>
+        </div>
       </section>
 
       <footer class='prototype-footer'>
